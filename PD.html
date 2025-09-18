@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Majestic Police Tourist Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="PD.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Majestic Railways — Police Dashboard</h1>
+    </header>
+
+    <!-- STATION LOGIN (STEP 1) -->
+    <section id="station-login" class="screen active">
+      <div class="card form-card">
+        <h2>Station Login</h2>
+        <label>Station Name</label>
+        <input id="stationName" type="text" placeholder="e.g. Majestic Police Station" />
+        <label>Station ID (2 letters + 6 digits)</label>
+        <input id="stationID" type="text" placeholder="e.g. KA123456" />
+        <label>Password (min 6 chars)</label>
+        <input id="stationPassword" type="password" placeholder="Station password" />
+        <div class="actions">
+          <button id="stationNextBtn">Next → Officer Login</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- OFFICER LOGIN (STEP 2) -->
+    <section id="officer-login" class="screen">
+      <div class="card form-card">
+        <h2>Officer Login</h2>
+        <label>Officer Badge ID (8 digits)</label>
+        <input id="officerID" type="text" placeholder="e.g. 12345678" />
+        <label>Password (min 6 chars)</label>
+        <input id="officerPassword" type="password" placeholder="Officer password" />
+        <div class="actions">
+          <button id="officerLoginBtn">Login → Dashboard</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD (STEP 3) -->
+    <section id="dashboard" class="screen">
+      <div class="topbar">
+        <div id="login-info">Not logged in</div>
+        <div>
+          <button id="logoutBtn" class="btn small">Logout</button>
+        </div>
+      </div>
+
+      <nav class="tabs">
+        <button data-target="tourists" class="tab-btn active">Tourists</button>
+        <button data-target="sos" class="tab-btn">SOS</button>
+        <button data-target="ai" class="tab-btn">AI Alerts</button>
+        <button data-target="firs" class="tab-btn">FIRs</button>
+        <button data-target="incidents" class="tab-btn">Incidents</button>
+        <button data-target="dashcams" class="tab-btn">Dashcams</button>
+        <button data-target="heatmap" class="tab-btn">Heatmap</button>
+      </nav>
+
+      <section class="dashboard-body">
+
+        <!-- Tourists -->
+        <div id="tourists" class="panel active">
+          <div class="panel-header">
+            <h3>Tourists</h3>
+            <input id="touristSearch" type="search" placeholder="Search by ID or name..." />
+          </div>
+          <div id="touristList" class="list"></div>
+        </div>
+
+        <!-- SOS -->
+        <div id="sos" class="panel">
+          <div class="panel-header"><h3>SOS Alerts</h3></div>
+          <div id="sosList" class="list"></div>
+        </div>
+
+        <!-- AI Alerts -->
+        <div id="ai" class="panel">
+          <div class="panel-header"><h3>AI Alerts</h3></div>
+          <div id="aiList" class="list"></div>
+        </div>
+
+        <!-- FIRs -->
+        <div id="firs" class="panel">
+          <div class="panel-header"><h3>FIR Management</h3></div>
+          <div id="firList" class="list"></div>
+          <div id="firPdfViewer" style="margin-top:15px; display:none;">
+            <iframe id="firPdfFrame" style="width:100%; height:600px; border:none;" src=""></iframe>
+          </div>
+        </div>
+
+        <!-- Incidents -->
+        <div id="incidents" class="panel">
+          <div class="panel-header"><h3>Incident Reports</h3></div>
+          <div id="incidentList" class="list"></div>
+        </div>
+
+        <!-- Dashcams -->
+        <div id="dashcams" class="panel">
+          <div class="panel-header"><h3>Dashcam Videos</h3></div>
+          <div id="dashcamList" class="list"></div>
+        </div>
+
+        <!-- Heatmap -->
+        <div id="heatmap" class="panel">
+          <div class="panel-header"><h3>Heatmap</h3></div>
+          <div class="card">
+            <img id="heatmapImg" src="majesticmap.png" alt="Heatmap (put heatmap.png next to these files)" style="max-width:100%" />
+          </div>
+        </div>
+
+      </section>
+    </section>
+  </main>
+
+  <!-- audio for sos -->
+  <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
+
+  <script src="PD.js"></script>
+</body>
+</html>
