@@ -45,7 +45,7 @@ let firs = [
 /* ---------- Incidents + Dashcams SAMPLE ---------- */
 const incidentReports = [
   { id: "INC-01", name: "Unknown Bag", location: "Sai Comfort Hotels", time: "2025-09-14 11:00", description: "A bag was left unattended in my hotel room. Even The hotel staff didn't know about it.", status: "Review", media: "incident1.webp" },
-  { id: "INC-02", name: "Scam", location: "Kempegowda Railway Terminal 2A", time: "2025-09-15 09:20", description: "A local vendor sold overpriced goods and water bottles. When confronted he verbally abused me.", status: "Review", media: "incident.jpeg" }
+  { id: "INC-02", name: "Scam", location: "Kempegowda Railway Terminal 2A", time: "2025-09-15 09:20", description: "A local vendor sold overpriced goods and water bottles. When confronted he verbally abused me.", status: "Review", media: "incident2.jpeg" }
 ];
 
 const dashcams = [
@@ -392,6 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("logoutBtn").onclick = () => { logout(); };
   renderAllModules();
 });
+
 
 
 
