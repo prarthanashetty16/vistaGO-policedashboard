@@ -49,8 +49,8 @@ const incidentReports = [
 ];
 
 const dashcams = [
-  { id: "DC-01", name: "Patrol Car 1", video: "dashcam1.mp4" },
-  { id: "DC-02", name: "Patrol Bike 2", video: "dashcam2.mp4" }
+  { id: "DC-01", name: "Patrol Car 1", video: "freecompress-dashcam1.mp4" },
+  { id: "DC-02", name: "Patrol Bike 2", video: "freecompress-dashcam2.mp4" }
 ];
 
 /* ---------- Helpers ---------- */
@@ -392,4 +392,5 @@ document.addEventListener("DOMContentLoaded", () => {
   $("logoutBtn").onclick = () => { logout(); };
   renderAllModules();
 });
+
 
