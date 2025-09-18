@@ -1,5 +1,5 @@
 /* ===========================
-   FULL Dashboard Script (FIR Draft + View PDF in New Tab, Details Visible Default)
+   FULL Dashboard Script (fixed SOS feed)
    =========================== */
 
 /* ---------- Validation patterns ---------- */
@@ -26,6 +26,7 @@ const waitingSOSAlerts = [
 let sosFeedIndex = 0;
 let sosFeedStarted = false;
 let sosActive = [];
+let sosIntervalId = null;
 
 /* ---------- FIRs (pre-attached PDF) ---------- */
 let firs = [
@@ -37,11 +38,22 @@ let firs = [
     time: "2025-09-15 13:45", 
     reason: "Reported missing", 
     status: "Drafted", 
-    pdf: "FIR.pdf" // must be in same folder as your HTML
+    pdf: "FIR.pdf"
   }
 ];
 
-/* ---------- --- Helpers ---------- */
+/* ---------- Incidents + Dashcams SAMPLE ---------- */
+const incidentReports = [
+  { id: "INC-01", name: "Pickpocketing", location: "Platform 2", time: "2025-09-14 11:00", description: "Reported pickpocket incident", status: "Review", media: "" },
+  { id: "INC-02", name: "Fight Breakout", location: "Near Exit B", time: "2025-09-15 09:20", description: "Minor scuffle resolved", status: "Completed", media: "" }
+];
+
+const dashcams = [
+  { id: "DC-01", name: "Patrol Car 1", video: "dashcam1.mp4" },
+  { id: "DC-02", name: "Patrol Bike 2", video: "dashcam2.mp4" }
+];
+
+/* ---------- Helpers ---------- */
 const $ = id => document.getElementById(id);
 
 /* ---------- Screens ---------- */
@@ -92,10 +104,9 @@ function validateOfficerLogin() {
 /* ---------- Logout ---------- */
 function logout() {
   localStorage.clear();
-  sosFeedIndex = 0;
-  sosActive = [];
-  sosFeedStarted = false;
+  stopSOSFeed();
   showScreen("station-login");
+  renderAllModules();
 }
 
 /* ---------- Tabs ---------- */
@@ -104,7 +115,7 @@ function activateTab(tabId) {
   document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
   $(tabId)?.classList.add("active");
 
-  if(tabId === "firs" && !currentViewingFIR) {
+  if (tabId === "firs" && !currentViewingFIR) {
     hideFIRPdfView();
   }
 }
@@ -147,6 +158,7 @@ function renderTourists(filter = "") {
     });
     container.appendChild(card);
   });
+  $("touristSearch")?.addEventListener("input", e => renderTourists(e.target.value));
 }
 
 /* ---------- AI Alerts ---------- */
@@ -196,34 +208,45 @@ function renderSOS() {
 function startSOSFeed(intervalMs = 30000) {
   if (sosFeedStarted) return;
   sosFeedStarted = true;
-  function pushNext() {
+
+  // First alert immediately
+  if (sosFeedIndex < waitingSOSAlerts.length) {
+    const first = waitingSOSAlerts[sosFeedIndex++];
+    sosActive.push(first);
+    renderSOS();
+    playSOSSound();
+  }
+
+  // Subsequent alerts every 30 sec
+  sosIntervalId = setInterval(() => {
     if (sosFeedIndex < waitingSOSAlerts.length) {
-      const next = waitingSOSAlerts[sosFeedIndex];
+      const next = waitingSOSAlerts[sosFeedIndex++];
       sosActive.push(next);
       renderSOS();
       playSOSSound();
-      sosFeedIndex++;
-      setTimeout(pushNext, intervalMs);
+    } else {
+      stopSOSFeed();
     }
+  }, intervalMs);
+}
+
+function stopSOSFeed() {
+  if (sosIntervalId) {
+    clearInterval(sosIntervalId);
+    sosIntervalId = null;
   }
-  pushNext();
+  sosFeedStarted = false;
+  sosFeedIndex = 0;
+  sosActive = [];
 }
 
 /* ---------- SOS Audio ---------- */
-let sosAudio;
-function initSOSAudio() {
-  sosAudio = new Audio("morse-sos.mp3");
-  sosAudio.load();
-  document.body.addEventListener("click", unlockAudio, { once: true });
-}
-function unlockAudio() {
-  sosAudio.play().then(() => {
-    sosAudio.pause();
-    sosAudio.currentTime = 0;
-  }).catch(console.warn);
-}
 function playSOSSound() {
-  if (sosAudio) sosAudio.play().catch(console.warn);
+  const audio = $("alertSound");
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(console.warn);
+  }
 }
 
 /* ---------- FIRs ---------- */
@@ -257,7 +280,6 @@ function renderFIRs() {
         <div>${actionHtml}</div>
       </div>
     `;
-    // Show details visible by default
     card.querySelector(".item-details").style.display = "block";
     container.appendChild(card);
   });
@@ -277,7 +299,6 @@ function renderFIRs() {
     b.onclick = () => {
       const fir = firs.find(x => x.caseId === b.dataset.case);
       if (!fir) return;
-      // Open PDF in new tab
       window.open(fir.pdf, "_blank");
     };
   });
@@ -368,7 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
   showScreen("station-login");
   $("stationNextBtn").onclick = validateStationLogin;
   $("officerLoginBtn").onclick = validateOfficerLogin;
-  $("logoutBtn").onclick = () => { logout(); renderAllModules(); };
+  $("logoutBtn").onclick = () => { logout(); };
   renderAllModules();
-  initSOSAudio(); // prepare SOS sound
 });
