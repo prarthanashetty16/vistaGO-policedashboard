@@ -44,13 +44,13 @@ let firs = [
 
 /* ---------- Incidents + Dashcams SAMPLE ---------- */
 const incidentReports = [
-  { id: "INC-01", name: "Pickpocketing", location: "Platform 2", time: "2025-09-14 11:00", description: "Reported pickpocket incident", status: "Review", media: "incident1.webp" },
-  { id: "INC-02", name: "Fight Breakout", location: "Near Exit B", time: "2025-09-15 09:20", description: "Minor scuffle resolved", status: "Review", media: "incident.jpeg" }
+  { id: "INC-01", name: "Unknown Bag", location: "Sai Comfort Hotels", time: "2025-09-14 11:00", description: "A bag was left unattended in my hotel room. Even The hotel staff didn't know about it.", status: "Review", media: "incident1.webp" },
+  { id: "INC-02", name: "Scam", location: "Kempegowda Railway Terminal 2A", time: "2025-09-15 09:20", description: "A local vendor sold overpriced goods and water bottles. When confronted he verbally abused me.", status: "Review", media: "incident.jpeg" }
 ];
 
 const dashcams = [
   { id: "DC-01", name: "Patrol Car 1", video: "freecompress-dashcam1.mp4" },
-  { id: "DC-02", name: "Patrol Bike 2", video: "freecompress-dashcam2.mp4" }
+  { id: "DC-02", name: "Patrol Car 2", video: "freecompress-dashcam2.mp4" }
 ];
 
 /* ---------- Helpers ---------- */
@@ -392,5 +392,6 @@ document.addEventListener("DOMContentLoaded", () => {
   $("logoutBtn").onclick = () => { logout(); };
   renderAllModules();
 });
+
 
 
